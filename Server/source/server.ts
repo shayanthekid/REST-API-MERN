@@ -3,7 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logging from './config/logging';
 import config from './config/config';
-import sampleRoutes from './routes/sample';
+import userRoutes from './routes/user';
 
 const NAMESPACE = 'Server';
 const router = express();
@@ -41,7 +41,7 @@ router.use((req,res,next)=>{
 
 
 /*Routes */
-router.use('/sample', sampleRoutes);
+router.use('/users', userRoutes);
 
 /*Error Handling */
 
