@@ -6,7 +6,7 @@ import config from './config/config';
 import userRoutes from './routes/user';
 import memberRoutes from './routes/member';
 import mongoose from 'mongoose';
-
+var cors = require('cors');
 const NAMESPACE = 'Server';
 const router = express();
 
@@ -40,6 +40,17 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 /* Rules of api */
+router.use(cors());
+router.options('*', cors());
+const allowlist = ['http://localhost:3000/', 'http://localhost:3001'];
+const corsOptionsDelegate = function (req:any, callback:any) {
+    let corsOptions;
+    if (allowlist.indexOf(req.header('Origin')) !== -1) corsOptions = { origin: true, credentials: true };
+    else corsOptions = { origin: false }; // disable CORS for this request
+    callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+router.use(cors(corsOptionsDelegate));
 
 router.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
