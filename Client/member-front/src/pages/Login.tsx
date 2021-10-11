@@ -1,28 +1,84 @@
-import React from 'react'
-
+import React, { SyntheticEvent } from "react";
+import { useState } from "react";
+import { Redirect } from "react-router";
 function Login() {
-    return (
-      <div>
-        <form>
-          <h1 className="h3 mb-3 fw-normal">Please Log in</h1>
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
 
-          <div className="form-floating">
-            <input type="email" className="form-control" placeholder="Email" />
-          </div>
-          <div className="form-floating">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Password"
-            />
-          </div>
+  function setStorage(userToken: string) {
+    localStorage.setItem("token", JSON.stringify(userToken));
+  }
 
-          <button className="w-100 btn btn-lg btn-primary" type="submit">
-            Sign in
-          </button>
-        </form>
-      </div>
-    );
+  function getStorage(token:string):boolean{
+    const Token = JSON.parse(localStorage.getItem("token") || "{}");
+    console.log(Token);
+
+    if(Token ===token){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
+  const submit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:1337/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+    const content = await response.json();
+
+    setToken(content.token);
+  };
+  setStorage(token);
+ 
+//  if( tokenCheck(token)){
+// return <Redirect to="/" />;
+//  }
+console.log((getStorage(token)));
+
+  return (
+    <div>
+      <form onSubmit={submit}>
+        <h1 className="h3 mb-3 fw-normal">Please Log in</h1>
+
+        <div className="form-floating">
+          <input
+            type="name"
+            className="form-control"
+            placeholder="Email"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+        </div>
+        <div className="form-floating">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+        </div>
+
+        <button className="w-100 btn btn-lg btn-primary" type="submit">
+          Log in
+        </button>
+      </form>
+    </div>
+  );
 }
 
-export default Login
+export default Login;
