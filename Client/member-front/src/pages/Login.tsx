@@ -10,18 +10,16 @@ function Login() {
     localStorage.setItem("token", JSON.stringify(userToken));
   }
 
-  function getStorage(token:string):boolean{
+  function getStorage(token: string): boolean {
     const Token = JSON.parse(localStorage.getItem("token") || "{}");
     console.log(Token);
 
-    if(Token ===token){
+    if (Token === token) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
-
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -41,11 +39,10 @@ function Login() {
     setToken(content.token);
   };
   setStorage(token);
- 
-//  if( tokenCheck(token)){
-// return <Redirect to="/" />;
-//  }
-console.log((getStorage(token)));
+
+  if (!!token) {
+       return <Redirect to="/" />;
+  }
 
   return (
     <div>
