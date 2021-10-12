@@ -17,7 +17,7 @@ IF NPM INSTALL DOES NOT WORK, PLEASE RUN yarn install
 
 There are 2 directories available
 
-Client,
+Client
 
 Server
 
@@ -68,5 +68,18 @@ Then, install node modules using either,
 Next, start the client using 
 
 `` npm start``
+
+These are all the relavent routes related to the client side
+
+# NOTE: IF USER IS NOT LOGGED IN, HOME(SHOW ALL MEMBERS), CREATE MEMBERS & EDIT MEMBERS WILL PROMPT THE USER TO LOG IN BY SHOWING AN ERROR MESSAGE
+
+````
+/ - This is the home directory. This will list all available members in the database
+/login - This is the login page
+/register - This is the register page
+/create - This page is used to create new members
+/edit - This page is used to delete and update existing members
+
+````
 
 
