@@ -1,46 +1,33 @@
 import React, { SyntheticEvent } from "react";
 import { useState, useEffect } from "react";
+import { validateAccessToken, getMembers } from "../Token";
+
+interface IState {
+  _id?: number;
+  Name?: string;
+  Email?: string;
+  Address?: string;
+  Birthdate?: Date;
+  Entrancedate?: Date;
+}
+
 function Edit() {
-  interface IState {
-    Members: {
-      _id?: number;
-      Name?: string;
-      Email?: string;
-      Address?: string;
-      Birthdate?: Date;
-      Entrancedate?: Date;
-    }[];
-  }
+  const [_id, setID] = useState<any>("");
+  const [Name, setName] = useState<any>("");
+  const [Email, setEmail] = useState<any>("");
+  const [Address, setAddress] = useState<any>("");
+  const [Birthdate, setBirthdate] = useState<any>("");
+  const [Entrancedate, setEntrance] = useState<any>("");
 
-  const [_id, setID] = useState("");
-  const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Address, setAddress] = useState("");
-  const [Birthdate, setBirthdate] = useState("");
-  const [Entrancedate, setEntrance] = useState("");
-
-  const [members, setMembers] = useState<IState["Members"]>([]);
+  const [members, setMembers] = useState<IState[]>([]);
 
   useEffect(() => {
-    // const content = await response.json();
-    getMembers();
-    // console.log(content.members);
+    getMembers().then(async (res) => {
+      const content = await res.json();
+      setMembers(content.members);
+    });
   }, []);
 
-  function getMembers() {
-    fetch("http://localhost:1337/members/getAllMembers", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      res.json().then((data) => {
-        // console.log(data);
-        setMembers(data.members);
-      });
-    });
-  }
-  console.log(members);
   const deleteMember = (_id: any) => {
     fetch("http://localhost:1337/members/deleteMember", {
       method: "DELETE",
@@ -53,11 +40,22 @@ function Edit() {
     }).then((res) => {
       res.json().then((resp) => {
         console.warn(resp);
-        getMembers();
+        getMembers().then(async (res) => {
+          const content = await res.json();
+          setMembers(content.members);
+        });
       });
     });
   };
 
+  const selectMember = (_id: any) => {
+    let member = members.find((x) => x._id === _id);
+    setName(member?.Name);
+    setEmail(member?.Email);
+    setAddress(member?.Address);
+    setBirthdate(member?.Birthdate);
+    setEntrance(member?.Entrancedate);
+  };
   return (
     <div className="table table-dark">
       <h1>Edit Members</h1>
@@ -89,11 +87,72 @@ function Edit() {
                 >
                   Delete
                 </button>
+                <button
+                  className="w-100 btn btn-lg btn-secondary"
+                  onClick={() => selectMember(member._id)}
+                >
+                  Update
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div>
+        <form>
+          <h1 className="h3 mb-3 fw-normal">Update</h1>
+
+          <div>
+            <input
+              type="text"
+              value={Name}
+              className="form-control"
+              placeholder="Name"
+              onChange={(e) => {}}
+            />
+          </div>
+          <div>
+            <input
+              type="email"
+              value={Email}
+              className="form-control"
+              placeholder="Email"
+              onChange={(e) => {}}
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              value={Address}
+              className="form-control"
+              placeholder="Address"
+              onChange={(e) => {}}
+            />
+          </div>
+          <div>
+            <input
+              type="date"
+              value={Birthdate}
+              className="form-control"
+              placeholder="Birthdate"
+              onChange={(e) => {}}
+            />
+          </div>
+          <div>
+            <input
+              type="date"
+              value={Entrancedate}
+              className="form-control"
+              placeholder="Entrancedate"
+              onChange={(e) => {}}
+            />
+          </div>
+
+          <button className="w-100 btn btn-lg btn-primary" type="submit">
+            Update Member
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
