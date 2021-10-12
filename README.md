@@ -4,7 +4,9 @@ This application was built with the MERN stack using Typescript. The Server foll
 
 # Getting Started
 You will need to be on the latest version of Node js
+
 You will need to install yarn first
+
 IF NPM INSTALL DOES NOT WORK, PLEASE RUN yarn install
 
 ``npm install --global yarn``
@@ -15,7 +17,8 @@ IF NPM INSTALL DOES NOT WORK, PLEASE RUN yarn install
 
 There are 2 directories available
 
-Client
+Client,
+
 Server
 
 # Server
