@@ -44,17 +44,17 @@ function Login() {
       <form onSubmit={submit}>
         <h1 className="h3 mb-3 fw-normal">Please Log in</h1>
 
-        <div className="form-floating">
+        <div >
           <input
             type="name"
             className="form-control"
-            placeholder="Email"
+            placeholder="Username"
             onChange={(e) => {
               setUsername(e.target.value);
             }}
           />
         </div>
-        <div className="form-floating">
+        <div>
           <input
             type="password"
             className="form-control"

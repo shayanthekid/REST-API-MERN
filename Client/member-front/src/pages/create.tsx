@@ -9,6 +9,8 @@ function Create() {
   const [Birthdate, setBirthdate] = useState("");
   const [Entrancedate, setEntrance] = useState("");
   const [token, setToken] = useState<string>("");
+  const [error, setError] = useState({ status: false, message: "" });
+  
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -24,7 +26,20 @@ function Create() {
         Birthdate,
         Entrancedate,
       }),
-    });
+    })
+      .then((res) => {
+        if (res.status === 201) setError({
+          status:true,
+          message:"Member Created Successfully"
+        });
+      })
+      .catch((err) => {
+        if (err.status === 500)
+          setError({
+            status: true,
+            message: "Not successfull. Please try again",
+          });
+      });
   };
 
 useEffect(()=>{
@@ -44,11 +59,12 @@ useEffect(()=>{
 
   return (
     <div>
+      {error.status ? <h1 color="red">{error.message}</h1> : ""}
       {token ? (
         <form onSubmit={submit}>
           <h1 className="h3 mb-3 fw-normal">Create new Members</h1>
 
-          <div className="form-floating">
+          <div>
             <input
               type="text"
               className="form-control"
@@ -59,7 +75,7 @@ useEffect(()=>{
               }}
             />
           </div>
-          <div className="form-floating">
+          <div>
             <input
               type="email"
               className="form-control"
@@ -70,7 +86,7 @@ useEffect(()=>{
               }}
             />
           </div>
-          <div className="form-floating">
+          <div>
             <input
               type="text"
               className="form-control"
@@ -81,7 +97,7 @@ useEffect(()=>{
               }}
             />
           </div>
-          <div className="form-floating">
+          <div>
             <input
               type="date"
               className="form-control"
@@ -92,7 +108,7 @@ useEffect(()=>{
               }}
             />
           </div>
-          <div className="form-floating">
+          <div>
             <input
               type="date"
               className="form-control"

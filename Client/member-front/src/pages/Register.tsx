@@ -44,9 +44,10 @@ function Register() {
 
   return (
     <form onSubmit={submit}>
+      {error.status ? <h1 color="red">{error.message}</h1> : ""}
       <h1 className="h3 mb-3 fw-normal">Please register</h1>
 
-      <div className="form-floating">
+      <div>
         <input
           type="name"
           className="form-control"
@@ -57,7 +58,7 @@ function Register() {
           }}
         />
       </div>
-      <div className="form-floating">
+      <div>
         <input
           type="password"
           className="form-control"
@@ -70,7 +71,7 @@ function Register() {
       </div>
 
       <button className="w-100 btn btn-lg btn-primary" type="submit">
-        Submit
+        Register
       </button>
     </form>
   );

@@ -19,7 +19,7 @@ function Edit() {
   const [Birthdate, setBirthdate] = useState<any>("");
   const [Entrancedate, setEntrance] = useState<any>("");
   const [token, setToken] = useState<string>("");
-
+  const [error, setError] = useState({ status: false, message: "" });
   const [members, setMembers] = useState<IState[]>([]);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ function Edit() {
       const content = await res.json();
       setMembers(content.members);
     });
+
   const localStorageToken = JSON.parse(localStorage.getItem("token")!);
   if (localStorageToken) {
     validateAccessToken(localStorageToken)
@@ -53,7 +54,10 @@ function Edit() {
       }),
     }).then((res) => {
       res.json().then((resp) => {
-        console.warn(resp);
+        setError({
+          status:true,
+          message:"Member Deleted Successfully"
+        })
         getMembers().then(async (res) => {
           const content = await res.json();
           setMembers(content.members);
@@ -78,7 +82,7 @@ const updateUser = ()=>{
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify({
       _id,
@@ -88,13 +92,28 @@ const updateUser = ()=>{
       Birthdate,
       Entrancedate,
     }),
-  });
+  })
+    .then((res) => {
+      if (res.status === 201)
+        setError({
+          status: true,
+          message: "Member Updated Successfully",
+        });
+    })
+    .catch((err) => {
+      if (err.status === 500)
+        setError({
+          status: true,
+          message: "Not successfull. Please try again",
+        });
+    });;
 }
 
   return (
     <div>
+      {error.status ? <h1 color="black">{error.message}</h1> : ""}
       {token ? (
-        <div className="table table-dark">
+        <div className="table ">
           <h1>Edit Members</h1>
           <table>
             <thead>
@@ -135,6 +154,7 @@ const updateUser = ()=>{
               ))}
             </tbody>
           </table>
+
           <div>
             <form>
               <h1 className="h3 mb-3 fw-normal">Update</h1>
@@ -193,14 +213,13 @@ const updateUser = ()=>{
                     setEntrance(e.target.value);
                   }}
                 />
+                <button
+                  className="w-100 btn btn-sml btn-primary"
+                  onClick={updateUser}
+                >
+                  Update Member
+                </button>
               </div>
-
-              <button
-                className="w-100 btn btn-lg btn-primary"
-                onClick={updateUser}
-              >
-                Update Member
-              </button>
             </form>
           </div>
         </div>

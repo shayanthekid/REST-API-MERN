@@ -1,7 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { validateAccessToken, getAccessToken } from "../Token";
 function Nav() {
+  const [token, setToken] = useState<string>("");
+  
+  useEffect(()=>{
+     setToken(JSON.stringify(localStorage.getItem("mytime")));
+  
+  },[])
+     console.log(token);
+  const logout = ()=>{
+    localStorage.clear();
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -12,7 +23,7 @@ function Nav() {
 
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
-              <li className="nav-item">
+              {token ? <li className="nav-item">
                 <Link
                   to="/login"
                   className="nav-link active"
@@ -20,12 +31,13 @@ function Nav() {
                 >
                   Login
                 </Link>
-              </li>
-              <li className="nav-item">
+              </li> : "" }
+             {token ? <li className="nav-item">
                 <Link to="/register" className="nav-link">
                   Register
                 </Link>
-              </li>
+              </li> : "" }
+             
               <li className="nav-item">
                 <Link to="/create" className="nav-link">
                   Create Member
@@ -37,6 +49,13 @@ function Nav() {
                 </Link>
               </li>
             </ul>
+            {token ?  <form className="d-flex">
+              
+              <button className="btn btn-outline-danger" onClick={logout}>
+                Log out
+              </button>
+            </form> : "" }
+           
           </div>
         </div>
       </nav>
