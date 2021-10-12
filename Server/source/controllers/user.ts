@@ -4,15 +4,16 @@ import bcryptjs from 'bcryptjs';
 import mongoose from 'mongoose';
 import User from '../models/user';
 import signJWT from '../functions/signJWT';
+import extractJWT from '../middleware/extractJWT';
 
 const NAMESPACE = 'Users';
 
 //Protected route to make sure token is working properly
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, 'Token validated, user authorized');
-
-    return res.status(200).json({
-        message: 'Authorized'
+   extractJWT(req, res, () => {
+        return res.status(200).json({
+            message: 'Authorized'
+        });
     });
 };
 

@@ -1,67 +1,54 @@
 import React, { SyntheticEvent } from "react";
 import { useState, useEffect } from "react";
 import { Redirect } from "react-router";
-function Home() {
-  interface IState {
-    Members: {
-      Name?: string;
-      Email?: string;
-      Address?: string;
-      Birthdate?: Date;
-      Entrancedate?: Date;
-    }[];
-  }
+import { validateAccessToken, getMembers } from "../Token";
 
-  const [token, setToken] = useState("");
-  const [members, setMembers] = useState<IState["Members"]>([]);
-
+interface IState {
  
+    Name?: string;
+    Email?: string;
+    Address?: string;
+    Birthdate?: Date;
+    Entrancedate?: Date;
+ 
+}
+
+function Home() {
+  const [token, setToken] = useState<string>("");
+  const [members, setMembers] = useState<IState[]>([]);
 
   useEffect(() => {
-    setToken(JSON.parse(localStorage.getItem("token") || "{}"));
-  });
+    const localStorageToken = JSON.parse(localStorage.getItem("token")!);
+    if (localStorageToken) {
+      validateAccessToken(localStorageToken)
+        .then((res) => {
+          if (res.status === 200) {
+            setToken(localStorageToken);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
-  useEffect(()=>{
-      async function displayMembers() {
-        
-       const response = await fetch(
-         "http://localhost:1337/members/getAllMembers",
-         {
-           method: "GET",
-           headers: {
-             "Content-Type": "application/json",
-           },
-         }
-       );
-       const content = await response.json();
+    getMembers().then(async (res) => {
+      const content = await res.json();
+      setMembers(content.members);
+    });
+  }, []);
+
+ 
+    return (
+      <div>
+        {token ? <div>{members.map((member,idx)=>{
+
+          return <p key={idx}>{member.Name}</p>
+          
+          })}</div> : <div>Not Logged in</div>}
       
-         console.log(content.members);
-         
-       setMembers(content.members);
-    
-       
-     };
-  displayMembers();
-  },[])
-
-
+      </div>
+    );
   
-  if (token === "") {
-    return <div>Not logged in</div>;
-  } else {
-
-    return <div>
-
-
-      Home
-{members.map((member)=>{
-return <p>{member.Name}</p>
-})}      
-      
-      
-      
-      </div>;
-  }
 }
 
 export default Home;

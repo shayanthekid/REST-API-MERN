@@ -1,25 +1,13 @@
 import React, { SyntheticEvent } from "react";
 import { useState } from "react";
 import { Redirect } from "react-router";
+import { setAccessToken } from "../Token";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
+  const [error, setError] = useState({ status: false, message: "" });
   const [token, setToken] = useState("");
-
-  function setStorage(userToken: string) {
-    localStorage.setItem("token", JSON.stringify(userToken));
-  }
-
-  function getStorage(token: string): boolean {
-    const Token = JSON.parse(localStorage.getItem("token") || "{}");
-    console.log(Token);
-
-    if (Token === token) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -36,16 +24,23 @@ function Login() {
     });
     const content = await response.json();
 
-    setToken(content.token);
+    if (response.status === 200) {
+      setAccessToken(content.token);
+      setError({ status: false, message: "" });
+      setRedirect(true);
+    } else if (response.status === 401) {
+      setError({ status: true, message: "Invalid Credentials" });
+      console.log("Unauthorized User");
+    }
   };
-  setStorage(token);
 
-  if (!!token) {
-       return <Redirect to="/" />;
+  if (redirect) {
+    return <Redirect to="/" />;
   }
 
   return (
     <div>
+      {error.status ? <h1 color="red">{error.message}</h1> : ""}
       <form onSubmit={submit}>
         <h1 className="h3 mb-3 fw-normal">Please Log in</h1>
 
