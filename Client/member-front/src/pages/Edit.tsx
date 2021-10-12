@@ -50,12 +50,33 @@ function Edit() {
 
   const selectMember = (_id: any) => {
     let member = members.find((x) => x._id === _id);
+    setID(member?._id);
     setName(member?.Name);
     setEmail(member?.Email);
     setAddress(member?.Address);
     setBirthdate(member?.Birthdate);
     setEntrance(member?.Entrancedate);
   };
+const updateUser = ()=>{
+
+  console.log(Name,Address);
+  fetch("http://localhost:1337/members/updateMember", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify({
+      _id,
+      Name,
+      Email,
+      Address,
+      Birthdate,
+      Entrancedate,
+    }),
+  });
+}
+
   return (
     <div className="table table-dark">
       <h1>Edit Members</h1>
@@ -108,7 +129,9 @@ function Edit() {
               value={Name}
               className="form-control"
               placeholder="Name"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
             />
           </div>
           <div>
@@ -117,7 +140,9 @@ function Edit() {
               value={Email}
               className="form-control"
               placeholder="Email"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
             />
           </div>
           <div>
@@ -126,7 +151,9 @@ function Edit() {
               value={Address}
               className="form-control"
               placeholder="Address"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setAddress(e.target.value)
+              }}
             />
           </div>
           <div>
@@ -135,7 +162,9 @@ function Edit() {
               value={Birthdate}
               className="form-control"
               placeholder="Birthdate"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setBirthdate(e.target.value)
+              }}
             />
           </div>
           <div>
@@ -144,11 +173,13 @@ function Edit() {
               value={Entrancedate}
               className="form-control"
               placeholder="Entrancedate"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setEntrance(e.target.value)
+              }}
             />
           </div>
 
-          <button className="w-100 btn btn-lg btn-primary" type="submit">
+          <button className="w-100 btn btn-lg btn-primary" onClick={updateUser}>
             Update Member
           </button>
         </form>
