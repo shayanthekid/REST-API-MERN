@@ -1,12 +1,13 @@
 import React, { SyntheticEvent } from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Redirect } from "react-router";
+
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
-
+  
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -21,11 +22,12 @@ function Register() {
       }),
     });
     setRedirect(true);
-   
   };
- if (redirect) {
-   return <Redirect to="/login" />;
- }
+  if (redirect) {
+    return <Redirect to="/login" />;
+  }
+
+  
 
   return (
     <form onSubmit={submit}>

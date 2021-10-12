@@ -18,6 +18,7 @@ function Edit() {
   const [Address, setAddress] = useState<any>("");
   const [Birthdate, setBirthdate] = useState<any>("");
   const [Entrancedate, setEntrance] = useState<any>("");
+  const [token, setToken] = useState<string>("");
 
   const [members, setMembers] = useState<IState[]>([]);
 
@@ -26,6 +27,19 @@ function Edit() {
       const content = await res.json();
       setMembers(content.members);
     });
+  const localStorageToken = JSON.parse(localStorage.getItem("token")!);
+  if (localStorageToken) {
+    validateAccessToken(localStorageToken)
+      .then((res) => {
+        if (res.status === 200) {
+          setToken(localStorageToken);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   }, []);
 
   const deleteMember = (_id: any) => {
@@ -78,112 +92,121 @@ const updateUser = ()=>{
 }
 
   return (
-    <div className="table table-dark">
-      <h1>Edit Members</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Birthdate</th>
-            <th>Entrancedate</th>
-            <th>Operations</th>
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((member) => (
-            <tr>
-              <td>{member._id}</td>
-              <td>{member.Name}</td>
-              <td>{member.Email}</td>
-              <td>{member.Address}</td>
-              <td>{member.Birthdate}</td>
-              <td>{member.Entrancedate}</td>
-              <td>
-                <button
-                  className="w-100 btn btn-lg btn-danger"
-                  onClick={() => deleteMember(member._id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="w-100 btn btn-lg btn-secondary"
-                  onClick={() => selectMember(member._id)}
-                >
-                  Update
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <form>
-          <h1 className="h3 mb-3 fw-normal">Update</h1>
+    <div>
+      {token ? (
+        <div className="table table-dark">
+          <h1>Edit Members</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Birthdate</th>
+                <th>Entrancedate</th>
+                <th>Operations</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => (
+                <tr>
+                  <td>{member._id}</td>
+                  <td>{member.Name}</td>
+                  <td>{member.Email}</td>
+                  <td>{member.Address}</td>
+                  <td>{member.Birthdate}</td>
+                  <td>{member.Entrancedate}</td>
+                  <td>
+                    <button
+                      className="w-100 btn btn-lg btn-danger"
+                      onClick={() => deleteMember(member._id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="w-100 btn btn-lg btn-secondary"
+                      onClick={() => selectMember(member._id)}
+                    >
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div>
+            <form>
+              <h1 className="h3 mb-3 fw-normal">Update</h1>
 
-          <div>
-            <input
-              type="text"
-              value={Name}
-              className="form-control"
-              placeholder="Name"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="email"
-              value={Email}
-              className="form-control"
-              placeholder="Email"
-              onChange={(e) => {
-                setEmail(e.target.value)
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              value={Address}
-              className="form-control"
-              placeholder="Address"
-              onChange={(e) => {
-                setAddress(e.target.value)
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="date"
-              value={Birthdate}
-              className="form-control"
-              placeholder="Birthdate"
-              onChange={(e) => {
-                setBirthdate(e.target.value)
-              }}
-            />
-          </div>
-          <div>
-            <input
-              type="date"
-              value={Entrancedate}
-              className="form-control"
-              placeholder="Entrancedate"
-              onChange={(e) => {
-                setEntrance(e.target.value)
-              }}
-            />
-          </div>
+              <div>
+                <input
+                  type="text"
+                  value={Name}
+                  className="form-control"
+                  placeholder="Name"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  value={Email}
+                  className="form-control"
+                  placeholder="Email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={Address}
+                  className="form-control"
+                  placeholder="Address"
+                  onChange={(e) => {
+                    setAddress(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  type="date"
+                  value={Birthdate}
+                  className="form-control"
+                  placeholder="Birthdate"
+                  onChange={(e) => {
+                    setBirthdate(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  type="date"
+                  value={Entrancedate}
+                  className="form-control"
+                  placeholder="Entrancedate"
+                  onChange={(e) => {
+                    setEntrance(e.target.value);
+                  }}
+                />
+              </div>
 
-          <button className="w-100 btn btn-lg btn-primary" onClick={updateUser}>
-            Update Member
-          </button>
-        </form>
-      </div>
+              <button
+                className="w-100 btn btn-lg btn-primary"
+                onClick={updateUser}
+              >
+                Update Member
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div>Not Logged in</div>
+      )}
     </div>
   );
 }
