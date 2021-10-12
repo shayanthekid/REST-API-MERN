@@ -73,6 +73,13 @@ These are all the relavent routes related to the client side
 
 # NOTE: IF USER IS NOT LOGGED IN, HOME(SHOW ALL MEMBERS), CREATE MEMBERS & EDIT MEMBERS WILL PROMPT THE USER TO LOG IN BY SHOWING AN ERROR MESSAGE
 
+Credentials to login with default user 
+
+````
+Username - newuser123
+Password - password
+````
+
 ````
 / - This is the home directory. This will list all available members in the database
 /login - This is the login page
