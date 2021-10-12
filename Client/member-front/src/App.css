@@ -1,5 +1,7 @@
-
-
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 1; /* Firefox */
+}
 .form-signin {
   width: 100%;
   max-width: 330px;

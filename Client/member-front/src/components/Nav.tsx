@@ -31,6 +31,11 @@ function Nav() {
                   Create Member
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to="/edit" className="nav-link">
+                  Edit Member
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
