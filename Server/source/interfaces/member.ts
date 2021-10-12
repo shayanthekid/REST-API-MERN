@@ -4,6 +4,6 @@ export default interface IMember extends Document {
     Name: string;
     Email: string;
     Address: string;
-    Birthdate: Date;
-    Entrancedate: Date;
+    Birthdate: string;
+    Entrancedate: string;
 }
