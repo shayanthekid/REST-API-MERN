@@ -7,11 +7,13 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+    const [error, setError] = useState({ status: false, message: "" });
   
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    await fetch("http://localhost:1337/users/register", {
+
+    const PARAMS = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,8 +22,19 @@ function Register() {
         username,
         password,
       }),
-    });
-    setRedirect(true);
+    };
+    
+
+    await fetch("http://localhost:1337/users/register",PARAMS)
+    .then(res=>{if(res.status===201) setRedirect(true)})
+    .catch(err =>{
+      if(err.status ===500) setError({
+        status:true,
+        message:"Not successfull. Please try again"
+      })
+    })
+
+
   };
   if (redirect) {
     return <Redirect to="/login" />;
