@@ -224,7 +224,7 @@ const updateUser = ()=>{
           </div>
         </div>
       ) : (
-        <div>Not Logged in</div>
+        <div className="Error-message">Not Logged in</div>
       )}
     </div>
   );

@@ -10,7 +10,7 @@ function Create() {
   const [Entrancedate, setEntrance] = useState("");
   const [token, setToken] = useState<string>("");
   const [error, setError] = useState({ status: false, message: "" });
-  
+
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -125,7 +125,7 @@ useEffect(()=>{
           </button>
         </form>
       ) : (
-        <div>Not Logged in</div>
+        <div className="Error-message">Not Logged in</div>
       )}
     </div>
   );

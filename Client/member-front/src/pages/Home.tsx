@@ -40,12 +40,34 @@ function Home() {
  
     return (
       <div>
-        {token ? <div>{members.map((member,idx)=>{
-
-          return <p key={idx}>{member.Name}</p>
-          
-          })}</div> : <div>Not Logged in</div>}
-      
+        <h2>All Members</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Birthdate</th>
+              <th>Entrancedate</th>
+            </tr>
+          </thead>
+          <tbody>
+        
+            {token ? (
+              members.map((member) => (
+                <tr>
+                  <td>{member.Name}</td>
+                  <td>{member.Email}</td>
+                  <td>{member.Address}</td>
+                  <td>{member.Birthdate}</td>
+                  <td>{member.Entrancedate}</td>
+                </tr>
+              ))
+            ) : (
+              <div className="Error-message">Not Logged in</div>
+            )}
+          </tbody>
+        </table>
       </div>
     );
   
