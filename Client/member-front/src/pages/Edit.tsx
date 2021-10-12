@@ -22,6 +22,12 @@ function Edit() {
   const [members, setMembers] = useState<IState["Members"]>([]);
 
   useEffect(() => {
+    // const content = await response.json();
+    getMembers();
+    // console.log(content.members);
+  }, []);
+
+  function getMembers() {
     fetch("http://localhost:1337/members/getAllMembers", {
       method: "GET",
       headers: {
@@ -33,10 +39,7 @@ function Edit() {
         setMembers(data.members);
       });
     });
-    // const content = await response.json();
-
-    // console.log(content.members);
-  }, []);
+  }
   console.log(members);
   const deleteMember = (_id: any) => {
     fetch("http://localhost:1337/members/deleteMember", {
@@ -50,6 +53,7 @@ function Edit() {
     }).then((res) => {
       res.json().then((resp) => {
         console.warn(resp);
+        getMembers();
       });
     });
   };
