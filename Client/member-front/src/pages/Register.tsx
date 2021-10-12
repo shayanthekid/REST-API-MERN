@@ -45,7 +45,7 @@ function Register() {
   return (
     <form onSubmit={submit}>
       {error.status ? <h1 color="red">{error.message}</h1> : ""}
-      <h1 className="h3 mb-3 fw-normal">Please register</h1>
+      <h1 className="h3 mb-3 fw-normal">Please Register</h1>
 
       <div>
         <input
